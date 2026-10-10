@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: polyscope-research
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_PASSWORD
+        sync: false
+      - key: APP_MODE
+        value: live
+      - key: DATA_DIR
+        value: /data
+      - key: SCAN_INTERVAL
+        value: '90'
+      - key: SCAN_PAGES
+        value: '2'
+      - key: SCAN_LIMIT
+        value: '60'
+      - key: WS_ENABLED
+        value: 'true'
+      - key: WS_MARKETS
+        value: '12'
+      - key: CAPITALS
+        value: 10,50,100
+      - key: ADVERSE_CENTS
+        value: '0.2'
+    disk:
+      name: research-db
+      mountPath: /data
+      sizeGB: 1

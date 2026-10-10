@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="color-scheme" content="dark"/>
+<meta name="theme-color" content="#0b1120"/>
+<title>Polymarket / Research Station</title>
+<link rel="stylesheet" href="/assets/style.css"/>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Research Station home">
+      <span class="brand-mark"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 2 33 10.5v15L18 34 3 25.5v-15L18 2Z" stroke="currentColor" stroke-width="1.6"/><path d="m8 24 7-12 5 8 4-5 5 9" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="24" cy="15" r="2" fill="currentColor"/></svg></span>
+      <span><b>POLY<span class="brand-accent">SCOPE</span></b><small>RESEARCH TERMINAL</small></span>
+    </a>
+    <div class="nav-overline">WORKSPACE</div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="nav-item selected" data-view="overview"><span class="nav-glyph">◫</span><span>Overview</span><span class="nav-trail">↗</span></button>
+      <button class="nav-item" data-view="opportunities"><span class="nav-glyph">⌁</span><span>Opportunities</span><span id="navSignals" class="small-tag">0</span></button>
+      <button class="nav-item" data-view="rewards"><span class="nav-glyph">◈</span><span>Reward pools</span></button>
+      <button class="nav-item" data-view="history"><span class="nav-glyph">◴</span><span>Scan history</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="side-panel"><span class="side-overline">SYSTEM MODE</span><div class="mode-row"><span id="mode-dot" class="dot gray"></span><span id="sideMode">INITIALIZING</span></div><small>No wallets · No live orders</small></div>
+      <a class="doc-link" href="https://docs.polymarket.com/" target="_blank" rel="noreferrer">Official API reference <span>↗</span></a>
+      <div class="powered">Independent tool · Not affiliated with Polymarket</div>
+    </div>
+  </aside>
+  <main class="content">
+    <header class="topbar">
+      <div class="breadcrumbs">RESEARCH <span>/</span> <strong id="crumbView">OVERVIEW</strong></div>
+      <div class="top-actions">
+        <span id="wsBadge" class="status-chip"><span class="dot gray"></span>WS pending</span>
+        <span id="lastScan" class="top-time">No snapshot yet</span>
+        <button id="refreshBtn" class="button secondary" title="Request an updated scan">↻ <span>Refresh</span></button>
+      </div>
+    </header>
+    <section class="page-title">
+      <div><div class="eyebrow"><span class="eyebrow-bar"></span> QUANT RESEARCH / PUBLIC MARKET DATA</div><h1 id="pageTitle">Market intelligence<span class="title-dot">.</span></h1><p id="pageSub">Observing real order books, not predicting guaranteed profits.</p></div>
+      <div class="snapshot-tag"><span class="pulse-circle"></span><span id="sourceLabel">WAITING FOR SOURCE</span></div>
+    </section>
+    <section id="alerts" class="alerts" aria-live="polite"></section>
+    <section class="view" data-panel="overview">
+      <div class="metrics">
+        <div class="metric"><div class="metric-head"><span>BOOK PAIRS OBSERVED</span><span class="metric-symbol">▤</span></div><div class="metric-number" id="mBooks">—</div><div class="metric-sub">Valid paired book responses</div></div>
+        <div class="metric"><div class="metric-head"><span>ELIGIBLE MARKETS</span><span class="metric-symbol">◉</span></div><div class="metric-number" id="mAccepted">—</div><div class="metric-sub">Strict market and fee checks</div></div>
+        <div class="metric"><div class="metric-head"><span>PAPER-POSITIVE ROWS</span><span class="metric-symbol">↗</span></div><div class="metric-number teal" id="mPositive">—</div><div class="metric-sub">Across simulated budgets</div></div>
+        <div class="metric"><div class="metric-head"><span>BEST THEORETICAL EDGE</span><span class="metric-symbol">$</span></div><div class="metric-number teal" id="mBest">—</div><div class="metric-sub">Not realized PnL / not fills</div></div>
+      </div>
+      <div class="main-grid">
+        <div class="panel chart-panel"><div class="panel-header"><div><h2>Signal activity</h2><p>Positive theoretical observations per scan</p></div><span class="panel-sublabel">LATEST 30 SCANS</span></div><div id="activityChart" class="chart" role="img" aria-label="Paper-positive observations per recent scan"><div class="chart-empty">Awaiting scan history</div></div><div class="chart-footer"><span><span class="legend-line"></span> Paper-positive observations</span><span>Repeated scans ≠ independent trades</span></div></div>
+        <div class="panel engine-panel"><div class="panel-header"><div><h2>Engine status</h2><p>Public market feed diagnostics</p></div><span id="engineState" class="mini-state">IDLE</span></div>
+          <div class="engine-line"><span>Source</span><b id="eSource">—</b></div>
+          <div class="engine-line"><span>Market WebSocket</span><b id="eWebsocket">—</b></div>
+          <div class="engine-line"><span>WS updates observed</span><b id="eEvents">—</b></div>
+          <div class="engine-line"><span>Scan interval</span><b id="eInterval">—</b></div>
+          <div class="engine-line"><span>Available budgets</span><b id="eCapitals">—</b></div>
+          <div class="engine-line"><span>Execution</span><b class="text-teal">DISABLED</b></div>
+          <div class="engine-callout">◈ &nbsp; Both legs must be affordable after depth, fees, and stress reserve. No orders are submitted.</div>
+        </div>
+      </div>
+      <div class="section-row"><div><h2>Top observed opportunities</h2><p>Snapshots, ranked by theoretical PnL</p></div><button class="text-button" data-jump="opportunities">Full scanner →</button></div>
+      <div id="overviewTable" class="panel table-wrap"></div>
+    </section>
+    <section class="view hidden" data-panel="opportunities">
+      <div class="panel filtering"><div class="filter-group"><label for="search">SEARCH MARKETS</label><input id="search" type="search" placeholder="Market question or ID…" autocomplete="off"/></div><div class="filter-group"><label for="budget">CAPITAL</label><select id="budget"><option value="">All budgets</option></select></div><div class="filter-group"><label for="filterStatus">EVALUATION</label><select id="filterStatus"><option value="">All evaluations</option><option value="PAPER_POSITIVE">Paper-positive</option><option value="PAPER_NEGATIVE">Paper-negative</option><option value="INFEASIBLE">Infeasible</option></select></div><div class="filter-group"><label for="minEdge">MIN PAPER PNL ($)</label><input id="minEdge" type="number" value="0" step="0.01" min="0"/></div></div>
+      <div class="section-row"><div><h2>Price inefficiencies</h2><p><span id="resultsCount">0</span> matching evaluations · USDC</p></div><a class="button secondary" href="/api/export.csv" download>↓ Export CSV</a></div>
+      <div id="fullTable" class="panel table-wrap"></div>
+      <p class="footnote">Theoretical YES+NO settlement value is $1 per complete pair. A positive value does not prove simultaneously executable orders. The order book can change before execution, with one-sided fill and lockup risks.</p>
+    </section>
+    <section class="view hidden" data-panel="rewards">
+      <div class="notice"><strong>Market-wide reward pools, not your income.</strong> The published daily allocation is shared among qualifying makers and depends on competition, resting quotes, and eligibility. This app does not place maker orders or estimate your personal earnings.</div>
+      <div id="rewardSummary" class="reward-summary"></div>
+      <div id="rewardTable" class="panel table-wrap"></div>
+    </section>
+    <section class="view hidden" data-panel="history">
+      <div class="notice"><strong>Historical snapshots are not a realized PnL backtest.</strong> Multiple positive observations of the same market must not be summed into profit.</div>
+      <div id="historyTable" class="panel table-wrap"></div>
+    </section>
+    <footer class="footer"><span>POLYSCOPE / RESEARCH ONLY</span><span>Official public data APIs · Unofficial independent project · No trading</span></footer>
+  </main>
+</div>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>
